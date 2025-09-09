@@ -44,7 +44,7 @@ const NavBar = () => {
         <div className="navbar">
           {/* Navbar Start */}
           <div className="navbar-start">
-            <a>
+            <a href="/">
               <Image src={logo} alt="Synthera_logo" className="w-44" />
             </a>
           </div>

@@ -1,4 +1,4 @@
-import dbConnection from "@/lib/dbConnection";
+import dbConnection from "@/app/lib/dbConnection";
 import { ObjectId } from "mongodb";
 
 async function authenticate(req) {

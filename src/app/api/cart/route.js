@@ -1,4 +1,4 @@
-import dbConnection from "@/lib/dbConnection";
+import dbConnection from "@/app/lib/dbConnection";
 
 export async function POST(req) {
   try {

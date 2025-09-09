@@ -1,4 +1,4 @@
-import dbConnection from "@/lib/dbConnection";
+import dbConnection from "../../lib/dbConnection";
 
 async function authenticate(req) {
   const token = req.headers.get("authorization")?.split(" ")[1];
@@ -13,7 +13,7 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: "Title and price required" }), { status: 400 });
     }
 
-    const productsCollection = await dbConnection("products"); // already collection
+    const productsCollection = await dbConnection("products"); 
     const result = await productsCollection.insertOne(product);
 
     return new Response(JSON.stringify({ ...product, _id: result.insertedId }), { status: 201 });
