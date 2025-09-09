@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import AllCart from "./user/AllCart";
 import OrderedItems from "./user/OrderedItems";
@@ -14,14 +14,40 @@ import SellerRequest from "./admin/SellerRequest";
 import TotalSellers from "./admin/TotalSellers";
 import TotalUsers from "./admin/TotalUsers";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 export default function DashboardLayout() {
   const [activeRoute, setActiveRoute] = useState("profile");
-  const {session: data, status }= useSession()
-  const [role] = useState("user");
-  console.log(status);
-  
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const role = user?.role;
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/api/user/me");
+        setUser(res.data.user);
+      } catch (err) {
+        console.error(
+          "Error fetching user:",
+          err.response?.data || err.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (loading)
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <span className="loading loading-dots loading-xl"></span>
+      </div>
+    );
+
+    
   const renderContent = () => {
     if (role === "admin") {
       switch (activeRoute) {
@@ -36,7 +62,7 @@ export default function DashboardLayout() {
         default:
           return <AdminProfile />;
       }
-    } else if(role === "seller"){
+    } else if (role === "seller") {
       switch (activeRoute) {
         case "profile":
           return <SellerProfile />;
@@ -49,7 +75,7 @@ export default function DashboardLayout() {
         default:
           return <SellerProfile />;
       }
-    }else{
+    } else {
       switch (activeRoute) {
         case "profile":
           return <UserProfile />;

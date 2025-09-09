@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 const NavBar = () => {
   const { data: session, status } = useSession();
-  console.log(status);
 
   const navItems = (
     <>
