@@ -7,15 +7,35 @@ import logo from "../assets/synthera_logo.png";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 const NavBar = () => {
-  const { data: session ,status} = useSession();
+  const { data: session, status } = useSession();
   console.log(status);
 
   const navItems = (
     <>
-      <li><Link className='bg-base-200' href="/" >Home</Link></li>
-      <li><Link className='bg-base-200' href="/Shop">Products</Link></li>
-      <li><Link className='bg-base-200' href="/dashboard">Dashboard</Link></li>
-       <li><Link className='bg-base-200' href="/" >Synthera AI</Link></li>
+      <li>
+        <Link className="bg-base-200" href="/">
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link className="bg-base-200" href="/Shop">
+          Products
+        </Link>
+      </li>
+      {status === "authenticated" ? (
+        <li>
+          <Link className="bg-base-200" href="/dashboard">
+            Dashboard
+          </Link>
+        </li>
+      ) : (
+        <></>
+      )}
+      <li>
+        <Link className="bg-base-200" href="/">
+          Synthera AI
+        </Link>
+      </li>
     </>
   );
 
@@ -32,7 +52,9 @@ const NavBar = () => {
 
           {/* Navbar Center */}
           <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-1 space-x-3 font-bold">{navItems}</ul>
+            <ul className="menu menu-horizontal px-1 space-x-3 font-bold">
+              {navItems}
+            </ul>
           </div>
 
           {/* Navbar End */}
@@ -53,9 +75,8 @@ const NavBar = () => {
               </Link>
             )}
           </div>
-  <ThemeToggle />
+          <ThemeToggle />
         </div>
-      
       </div>
     </div>
   );
