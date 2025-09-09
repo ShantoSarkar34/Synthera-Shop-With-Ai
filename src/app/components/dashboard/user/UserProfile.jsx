@@ -23,34 +23,33 @@ const purchaseData = [
 ];
 
 export default function UserProfile() {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-  
-    useEffect(() => {
-      const fetchUser = async () => {
-        try {
-          const res = await axios.get("/api/user/me");
-          setUser(res.data.user);
-        } catch (err) {
-          console.error(
-            "Error fetching user:",
-            err.response?.data || err.message
-          );
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchUser();
-    }, []);
-  
-    if (loading)
-      return (
-        <div className="min-h-screen w-full flex items-center justify-center">
-          <span className="loading loading-dots loading-xl"></span>
-        </div>
-      );
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/api/user/me");
+        setUser(res.data.user);
+      } catch (err) {
+        console.error(
+          "Error fetching user:",
+          err.response?.data || err.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (loading)
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <span className="loading loading-dots loading-xl"></span>
+      </div>
+    );
 
   return (
     <div className="space-y-6">
@@ -73,8 +72,8 @@ export default function UserProfile() {
             <p className="text-gray-200">{user?.email}</p>
             <div className="flex justify-center sm:justify-start gap-4 mt-2 text-gray-200 text-sm">
               <div className="flex items-center gap-1">
-                CreatedAt : <span>{user.createdAt.slice(0, 10)} </span> 
-              </div> 
+                CreatedAt : <span>{user.createdAt.slice(0, 10)} </span>
+              </div>
             </div>
             <span className="mt-2 inline-block px-5 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
               User

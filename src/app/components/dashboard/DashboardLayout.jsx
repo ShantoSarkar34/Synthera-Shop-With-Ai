@@ -47,7 +47,6 @@ export default function DashboardLayout() {
       </div>
     );
 
-    
   const renderContent = () => {
     if (role === "admin") {
       switch (activeRoute) {
