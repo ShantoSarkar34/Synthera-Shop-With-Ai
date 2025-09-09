@@ -2,6 +2,7 @@
 import { useState, use } from "react";
 import products from "@/../public/product.json";
 import useAddToCart from "@/app/hooks/useAddToCart";
+import Image from "next/image";
 import { Toaster } from "react-hot-toast";
 
 export default function ProductDetails({ params: paramsPromise }) {
@@ -31,7 +32,7 @@ export default function ProductDetails({ params: paramsPromise }) {
       {/* Left: Image + Thumbnails */}
       <div className="flex flex-col items-center">
         <div className="w-full md:w-[450px] h-[450px] bg-[#E1E4E9] rounded-md p-3 flex items-center justify-center">
-          <img
+          <Image
             src={product.thumbnail}
             alt={product.title}
             className="max-w-full max-h-full object-contain rounded-md"
@@ -44,7 +45,7 @@ export default function ProductDetails({ params: paramsPromise }) {
               key={index}
               className="w-full h-24 bg-[#F5F5F5] rounded-md p-1 hover:scale-105 transition-transform cursor-pointer flex items-center justify-center"
             >
-              <img
+              <Image
                 src={subImg}
                 alt={`Product Image ${index + 1}`}
                 className="max-w-full max-h-full object-contain rounded-md"
