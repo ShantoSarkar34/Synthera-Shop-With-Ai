@@ -57,7 +57,7 @@ export default function AdminProfile() {
   const totalUser = user?.filter((res) => res.role === "user");
   const totalSeller = user?.filter((res) => res.role === "seller");
 
-  /** ------------ PIE CHART DATA ------------ */
+  /**  PIE CHART DATA  */
   const pieData = {
     labels: ["Users", "Sellers"],
     datasets: [
@@ -68,7 +68,7 @@ export default function AdminProfile() {
       },
     ],
   };
-  /** ------------ REVENUE LINE CHART DATA ------------ */
+  /**  REVENUE LINE CHART DATA  */
   const revenueData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
     datasets: [
@@ -82,7 +82,7 @@ export default function AdminProfile() {
       },
     ],
   };
-  /** ------------ BAR CHART DATA (Sales by Category) ------------ */
+  /**  BAR CHART DATA (Sales by Category) */
   const barData = {
     labels: ["Electronics", "Fashion", "Home", "Beauty", "Sports"],
     datasets: [
@@ -93,7 +93,7 @@ export default function AdminProfile() {
       },
     ],
   };
-  /** ------------ DOUGHNUT CHART DATA (Revenue Breakdown by Category) ------------ */
+  /**  DOUGHNUT CHART DATA (Revenue Breakdown by Category) */
   const revenueBreakdownData = {
     labels: ["Electronics", "Fashion", "Home", "Beauty", "Sports"],
     datasets: [
@@ -128,6 +128,7 @@ export default function AdminProfile() {
       },
     },
   };
+
 
   if (loading)
     return (
@@ -169,7 +170,7 @@ export default function AdminProfile() {
           <User size={28} className="text-yellow-400" />
           <div>
             <p className="text-sm text-gray-300">Total Users</p>
-            <h3 className="text-xl font-bold">{filteredUser.length}</h3>
+            <h3 className="text-xl font-bold">{totalUser.length}</h3>
           </div>
         </motion.div>
 

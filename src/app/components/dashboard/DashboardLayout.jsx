@@ -3,21 +3,36 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Sidebar from "./Sidebar";
 import axios from "axios";
+import WishlistItems from "./user/WishlistItems";
 
 const AllCart = dynamic(() => import("./user/AllCart"), { ssr: false });
-const OrderedItems = dynamic(() => import("./user/OrderedItems"), { ssr: false });
-const PendingDelivery = dynamic(() => import("./user/PendingDelivery"), { ssr: false });
+const OrderedItems = dynamic(() => import("./user/OrderedItems"), {
+  ssr: false,
+});
+const PendingDelivery = dynamic(() => import("./user/PendingDelivery"), {
+  ssr: false,
+});
 
 const AddProduct = dynamic(() => import("./seller/AddProduct"), { ssr: false });
-const AllProducts = dynamic(() => import("./seller/AllProducts"), { ssr: false });
+const AllProducts = dynamic(() => import("./seller/AllProducts"), {
+  ssr: false,
+});
 const TotalSell = dynamic(() => import("./seller/TotalSell"), { ssr: false });
-const SellerProfile = dynamic(() => import("./seller/SellerProfile"), { ssr: false });
+const SellerProfile = dynamic(() => import("./seller/SellerProfile"), {
+  ssr: false,
+});
 
 const UserProfile = dynamic(() => import("./user/UserProfile"), { ssr: false });
 
-const AdminProfile = dynamic(() => import("./admin/AdminProfile"), { ssr: false });
-const SellerRequest = dynamic(() => import("./admin/SellerRequest"), { ssr: false });
-const TotalSellers = dynamic(() => import("./admin/TotalSellers"), { ssr: false });
+const AdminProfile = dynamic(() => import("./admin/AdminProfile"), {
+  ssr: false,
+});
+const SellerRequest = dynamic(() => import("./admin/SellerRequest"), {
+  ssr: false,
+});
+const TotalSellers = dynamic(() => import("./admin/TotalSellers"), {
+  ssr: false,
+});
 const TotalUsers = dynamic(() => import("./admin/TotalUsers"), { ssr: false });
 
 export default function DashboardLayout() {
@@ -84,6 +99,8 @@ export default function DashboardLayout() {
           return <UserProfile />;
         case "all-cart":
           return <AllCart />;
+        case "wishlist":
+          return <WishlistItems/>;
         case "ordered-item":
           return <OrderedItems />;
         case "pending-delivery":
@@ -95,15 +112,15 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-300">
+    <div className="min-h-screen bg-gray-300 pt-5 lg:pt-0">
       <div className="container mx-auto px-4 flex p-8">
         <Sidebar
           role={role}
           activeRoute={activeRoute}
           setActiveRoute={setActiveRoute}
         />
-        <div className="flex flex-col flex-1 pl-8">
-          <main className="p-6 bg-white rounded-2xl text-black">
+        <div className="flex flex-col flex-1 md:pl-4 lg:pl-8">
+          <main className="lg:p-6 bg-white rounded-2xl text-black">
             {renderContent()}
           </main>
         </div>
