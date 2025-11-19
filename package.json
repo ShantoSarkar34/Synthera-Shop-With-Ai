@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-  "build": "next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
@@ -17,6 +17,7 @@
     "daisyui": "^5.1.7",
     "framer-motion": "^12.23.12",
     "jsonwebtoken": "^9.0.2",
+    "lightningcss": "1.27.0",
     "lucide-react": "^0.542.0",
     "mongodb": "^6.19.0",
     "next": "^15.5.3",
@@ -30,10 +31,9 @@
     "react-icons": "^5.5.0",
     "react-slick": "^0.31.0",
     "recharts": "^3.1.2",
+    "sharp": "^0.34.5",
     "slick-carousel": "^1.8.1",
-    "sweetalert2": "^11.23.0",
-    "lightningcss": "1.27.0"
-
+    "sweetalert2": "^11.23.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
