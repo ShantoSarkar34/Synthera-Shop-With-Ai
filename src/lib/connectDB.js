@@ -1,14 +1,16 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please define the MONGODB_URI environment variable");
+}
+
+const uri = process.env.MONGODB_URI;
+
+// Global is used here to maintain a cached connection across hot reloads in dev mode
 let client;
-let db;
+let clientPromise;
 
-export const connectDB = async () => {
-  if (db) return db;
-
-  const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("Please define MONGO_URI in .env.local");
-
+if (!global._mongoClientPromise) {
   client = new MongoClient(uri, {
     serverApi: {
       version: ServerApiVersion.v1,
@@ -17,11 +19,13 @@ export const connectDB = async () => {
     },
   });
 
-  await client.connect();
+  global._mongoClientPromise = client.connect();
+}
 
-  // Use the database defined in your URI
-  const dbName = new URL(uri).pathname.substring(1); // takes database name from URI
-  db = client.db(dbName);
-  console.log("Connected to MongoDB:", db.databaseName);
-  return db;
-};
+clientPromise = global._mongoClientPromise;
+
+export async function connectDB() {
+  const client = await clientPromise;
+  const dbName = new URL(uri).pathname.substring(1);
+  return client.db(dbName);
+}
