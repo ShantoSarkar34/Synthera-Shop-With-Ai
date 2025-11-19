@@ -81,7 +81,6 @@ AI:
 
     // Save AI response
     conversationHistory.push({ role: "ai", content: text });
-
     return new Response(JSON.stringify({ reply: text }), { status: 200 });
   } catch (error) {
     console.error("Error in AI API:", error);
