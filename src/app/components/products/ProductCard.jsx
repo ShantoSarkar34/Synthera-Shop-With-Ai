@@ -3,12 +3,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaRegEye, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { Toaster } from "react-hot-toast";
-import useAddToCart from "@/app/hooks/useAddToCart"; // <- import the hook
+import useAddToCart from "@/app/hooks/useAddToCart"; 
+import useWishlist from "@/app/hooks/useWishlist";
 
 export default function ProductCard({ product }) {
   const router = useRouter();
-  const { addToCart } = useAddToCart(); // <- get the reusable addToCart function
-
+  const { addToCart } = useAddToCart(); 
+const { addToWishlist } = useWishlist();
   const {
     title,
     category,
@@ -19,8 +20,8 @@ export default function ProductCard({ product }) {
     variants,
     description,
     rating,
-    productId,
-    // _id
+  _id
+  
   } = product;
 
   const [activeImage, setActiveImage] = useState(thumbnail);
@@ -33,13 +34,9 @@ export default function ProductCard({ product }) {
       <Toaster position="top-right" />
 
       {/* Product Card */}
-      <div className="shadow-md rounded-md w-[250px] relative group p-4 cursor-pointer">
+      <div className="shadow-md bg-gray-100 rounded-md w-[250px] relative group p-4 cursor-pointer">
         <div className="relative bg-[#E1E4E9] rounded-md p-3">
-          <img
-            src={activeImage}
-            alt={title}
-            className="w-full h-[250px] object-contain"
-          />
+          <img src={activeImage} alt={title} className="w-full h-[250px] object-contain" />
 
           {/* Hover overlay */}
           <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition bg-black/40 rounded-md">
@@ -47,9 +44,9 @@ export default function ProductCard({ product }) {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                router.push(`/Products/${productId}`);
+                router.push(`/Products/${_id}`);
               }}
-              className="bg-white cursor-pointer p-2 rounded-full hover:scale-110 transition"
+              className="bg-white p-2 rounded-full hover:scale-110 transition"
             >
               <FaRegEye className="text-gray-800" />
             </button>
@@ -60,7 +57,7 @@ export default function ProductCard({ product }) {
                 e.stopPropagation();
                 setShowModal(true);
               }}
-              className="bg-white cursor-pointer p-2 rounded-full hover:scale-110 transition"
+              className="bg-white p-2 rounded-full hover:scale-110 transition"
             >
               <FaShoppingCart className="text-gray-800" />
             </button>
@@ -72,19 +69,14 @@ export default function ProductCard({ product }) {
           <span className="uppercase">{category}</span>
           <span>{sizes.join(" ")}</span>
         </div>
-        <h3
-          className="font-semibold text-gray-800 mt-1"
-          onClick={() => router.push(`/Products/${productId}`)}
-        >
+        <h3 className="font-semibold text-gray-800 mt-1" onClick={() => router.push(`/Products/${productId}`)}>
           {title}
         </h3>
 
         {/* Price*/}
         <div className="flex items-center gap-2 mt-1">
           <span className="text-lg font-bold text-black">${discountPrice}</span>
-          {discountPrice < price && (
-            <span className="line-through text-gray-400">${price}</span>
-          )}
+          {discountPrice < price && <span className="line-through text-gray-400">${price}</span>}
         </div>
 
         {/* Variants + Wishlist */}
@@ -92,18 +84,21 @@ export default function ProductCard({ product }) {
           {variants?.map((variant, idx) => (
             <button
               key={idx}
-              className="w-6 cursor-pointer h-6 rounded-full border hover:scale-110 transition"
+              className="w-6 h-6 rounded-full border hover:scale-110 transition"
               style={{ backgroundColor: variant.color.toLowerCase() }}
               onMouseEnter={() => setActiveImage(variant.image)}
               onMouseLeave={() => setActiveImage(thumbnail)}
             />
           ))}
-          <button
-            className="ml-auto cursor-pointer text-gray-500 hover:text-red-500"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <FaHeart />
-          </button>
+         <button
+    className="ml-auto text-gray-500 hover:text-red-500"
+    onClick={(e) => {
+      e.stopPropagation();
+      addToWishlist(product); 
+    }}
+  >
+    <FaHeart />
+  </button>
         </div>
       </div>
 
@@ -112,21 +107,14 @@ export default function ProductCard({ product }) {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-[500px] max-h-[90vh] overflow-y-auto relative">
             {/* Close button */}
-            <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-black"
-              onClick={() => setShowModal(false)}
-            >
+            <button className="absolute top-3 right-3 text-gray-500 hover:text-black" onClick={() => setShowModal(false)}>
               ✕
             </button>
 
             <div className="grid grid-cols-2 gap-6">
               {/* Left: Image */}
               <div>
-                <img
-                  src={activeImage}
-                  alt={title}
-                  className="w-full h-[250px] object-contain rounded"
-                />
+                <img src={activeImage} alt={title} className="w-full h-[250px] object-contain rounded" />
               </div>
 
               {/* Right: Info */}
@@ -144,9 +132,7 @@ export default function ProductCard({ product }) {
                 {/* Price */}
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-lg font-bold">${discountPrice}</span>
-                  {discountPrice < price && (
-                    <span className="line-through text-gray-400">${price}</span>
-                  )}
+                  {discountPrice < price && <span className="line-through text-gray-400">${price}</span>}
                 </div>
 
                 {/* Sizes */}
@@ -157,11 +143,7 @@ export default function ProductCard({ product }) {
                       <button
                         key={s}
                         onClick={() => setSelectedSize(s)}
-                        className={`px-3 py-1 border rounded ${
-                          selectedSize === s
-                            ? "bg-black text-white"
-                            : "hover:bg-gray-200"
-                        }`}
+                        className={`px-3 py-1 border rounded ${selectedSize === s ? "bg-black text-white" : "hover:bg-gray-200"}`}
                       >
                         {s}
                       </button>
@@ -171,24 +153,18 @@ export default function ProductCard({ product }) {
 
                 {/* Quantity */}
                 <div className="flex items-center gap-2 mt-4">
-                  <button
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="px-3 py-1 border rounded"
-                  >
+                  <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="px-3 py-1 border rounded">
                     -
                   </button>
                   <span>{quantity}</span>
-                  <button
-                    onClick={() => setQuantity((q) => q + 1)}
-                    className="px-3 py-1 border rounded"
-                  >
+                  <button onClick={() => setQuantity((q) => q + 1)} className="px-3 py-1 border rounded">
                     +
                   </button>
                 </div>
 
                 {/* Add to Cart */}
                 <button
-                  onClick={() => addToCart(product, selectedSize, quantity)}
+                  onClick={() => addToCart(product, selectedSize, quantity)} 
                   className="mt-4 w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
                 >
                   Add to Cart

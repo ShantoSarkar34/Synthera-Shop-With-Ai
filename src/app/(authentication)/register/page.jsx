@@ -8,73 +8,81 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
-import logo from "../../assets/synthera_logo.png";
-import shopImg from "../../assets/shop_img3.png";
+// import logo from "../../assets/synthera_logo.png";
+// import shopImg from "../../assets/shop_img3.png";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const session = useSession();
-   const today = new Date();
+  const today = new Date();
 
+  const handleSignUp = async (e) => {
+    e.preventDefault();
 
-
-const handleSignUp = async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData(e.target);
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const role = "user";
-      const createdAt = `${String(today.getMonth() + 1).padStart(
+    const formData = new FormData(e.target);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const role = "user";
+    const createdAt = `${String(today.getMonth() + 1).padStart(
       2,
       "0"
     )}-${String(today.getDate()).padStart(2, "0")}-${today.getFullYear()}`;
 
-  try {
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password, role ,createdAt}),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      Swal.fire({ icon: "error", title: "Error", text: data.error || "Signup failed" });
-      return;
-    }
-
-    // Auto login after signup using NextAuth Credentials
-    const loginRes = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (loginRes?.error) {
-      Swal.fire({ icon: "error", title: "Login Error", text: loginRes.error });
-    } else {
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Signed up and logged in successfully!",
-        timer: 2000,
-        showConfirmButton: false,
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, role, createdAt }),
       });
-      router.push("/");
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: data.error || "Signup failed",
+        });
+        return;
+      }
+
+      // Auto login after signup using NextAuth Credentials
+      const loginRes = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (loginRes?.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Login Error",
+          text: loginRes.error,
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Signed up and logged in successfully!",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        router.push("/");
+      }
+    } catch (err) {
+      console.error("Signup Error:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong",
+      });
     }
-  } catch (err) {
-    console.error("Signup Error:", err);
-    Swal.fire({ icon: "error", title: "Error", text: "Something went wrong" });
-  }
-};
+  };
 
-
- 
-  const handleSocialLogin = () => {
-    console.log("trying to log in with google");
+  const handleSocialLogin = async (providerName) => {
+    signIn(providerName);
   };
 
   useEffect(() => {
@@ -103,13 +111,25 @@ const handleSignUp = async (e) => {
             collections, track orders, and personalize your online store
             experience.
           </p>
-          <Image src={shopImg} alt="Characters" className="w-96" />
+          <Image
+            src="/shop_img3.png"
+            alt="Characters"
+            width={384}
+            height={384}
+            className="w-96"
+          />
         </div>
 
         {/* Right Section */}
         <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
           <div className="text-center">
-            <Image src={logo} width={80} className="mx-auto w-44" alt="logo" />
+            <Image
+              src="/synthera_logo.png"
+              width={176}
+              height={44}
+              className="mx-auto w-44"
+              alt="logo"
+            />
             <div className="mt-2 space-y-2">
               <h3 className="text-2xl font-bold sm:text-3xl text-black">
                 Create Your Account
@@ -163,16 +183,14 @@ const handleSignUp = async (e) => {
 
           <div className="flex items-center my-6">
             <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-2 text-gray-400 text-sm">
-              Or Register With
-            </span>
+            <span className="px-2 text-gray-400 text-sm">Or Register With</span>
             <div className="flex-grow h-px bg-gray-300"></div>
           </div>
 
-          <div className="flex">
+          <div className="flex ">
             <button
               onClick={() => {
-                handleSocialLogin();
+                handleSocialLogin("google");
               }}
               className="flex-1 cursor-pointer flex text-black items-center justify-center p-3 border-2 border-[#1E40AF] rounded-lg shadow-sm hover:bg-[#E0E7FF] hover:border-[#1C3A9B] transition duration-300"
             >
